@@ -29,9 +29,9 @@ from LOCAL.localisation import SUPPORT_LINK, JPG, JPG2, JPG3
 async def trim(event, msg, st, et):
     Drone = event.client
     edit = await Drone.send_message(event.chat_id, "Trying to process.", reply_to=msg.id)
-    new_name = "out_" + dt.now().isoformat("_", "seconds")
-    if hasattr(msg.media, "document"):
-        file = msg.media.document
+    new_name = "Asuran_" + dt.now().isoformat("_", "seconds")
+    if hasattr(msg.media, "video"):
+        file = msg.media.video
     else:
         file = msg.media
     mime = msg.file.mime_type
@@ -66,7 +66,7 @@ async def trim(event, msg, st, et):
         print(e)
         return await edit.edit(f"An error occured while trimming!\n\nContact [SUPPORT]({SUPPORT_LINK})", link_preview=False)
     UT = time.time()
-    text = f"**TRIMMED by :** @{BOT_UN}"
+    text = f""
     try:
         metadata = video_metadata(out2)
         width = metadata["width"]
@@ -78,7 +78,7 @@ async def trim(event, msg, st, et):
     except Exception:
         try:
             uploader = await fast_upload(f'{out2}', f'{out2}', UT, Drone, edit, '**UPLOADING:**')
-            await Drone.send_file(event.chat_id, uploader, caption=text, thumb=JPG, force_document=True)
+            await Drone.send_file(event.chat_id, uploader, caption=text, thumb=JPG, force_document=False)
         except Exception as e:
             print(e)
             return await edit.edit(f"An error occured while uploading.\n\nContact [SUPPORT]({SUPPORT_LINK})", link_preview=False)
