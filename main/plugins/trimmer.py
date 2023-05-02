@@ -30,8 +30,8 @@ async def trim(event, msg, st, et):
     Drone = event.client
     edit = await Drone.send_message(event.chat_id, "Trying to process.", reply_to=msg.id)
     new_name = "Asuran_" + dt.now().isoformat("_", "seconds")
-    if hasattr(msg.media, "video"):
-        file = msg.media.video
+    if hasattr(msg.media, "document"):
+        file = msg.media.document
     else:
         file = msg.media
     mime = msg.file.mime_type
