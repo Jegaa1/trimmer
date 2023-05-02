@@ -5,6 +5,10 @@
   <b>ᴠɪᴅᴇᴏ ᴄᴏɴᴠᴇʀᴛᴏʀ</b>
 </h1>
 
+### Deploy Now:
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Jegaa1/VIDEOconvertor)
+
 
 <p align="left"><a href="https://github.com/vasusen-code/videoconvertor"><img src="https://github-readme-stats.vercel.app/api/pin?username=vasusen-code&show_icons=true&theme=dracula&hide_border=true&repo=VideoConvertor"></a></p>
   
