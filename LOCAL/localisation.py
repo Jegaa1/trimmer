@@ -37,6 +37,6 @@ JPG = "LOCAL/video_convertor.jpg"
 
 JPG0 = 'LOCAL/video_convertor.jpg'
 
-JPG2 = "LOCAL/20211215_165751.jpg"
+JPG2 = "LOCAL/video_convertor.jpg"
 
 JPG3 = "LOCAL/PicsArt_12-16-08.57.15.jpg"
