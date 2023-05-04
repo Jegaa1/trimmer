@@ -311,10 +311,11 @@ async def vtrim(event):
     markup = event.client.build_reply_markup(Button.force_reply())
     async with Drone.conversation(event.chat_id) as conv: 
         try:
-            xx = await conv.send_message("send me the start time of the video you want to trim from as a reply to this. \n\nIn format hh:mm:ss , for eg: `00:00:00` ", buttons=markup)
-            x = await conv.get_reply()
-            st = x.text
-            await xx.delete()                    
+            #xx = await conv.send_message("send me the start time of the video you want to trim from as a reply to this. \n\nIn format hh:mm:ss , for eg: `00:00:00` ", buttons=markup)
+            #x = await conv.get_reply()
+            #st = x.text
+            st = 00:00:00.text
+            #await xx.delete()                    
             if not st:               
                 return await xx.edit("No response found.")
         except Exception as e: 
