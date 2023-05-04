@@ -314,7 +314,7 @@ async def vtrim(event):
             #xx = await conv.send_message("send me the start time of the video you want to trim from as a reply to this. \n\nIn format hh:mm:ss , for eg: `00:00:00` ", buttons=markup)
             #x = await conv.get_reply()
             #st = x.text
-            st = 00:00:00
+            st = '00:00:00'
             #await xx.delete()                    
             if not st:               
                 return await xx.edit("No response found.")
