@@ -31,7 +31,7 @@ async def compress(event, msg, ffmpeg_cmd=0, ps_name=None):
     if ps_name is None:
         ps_name = '**COMPRESSING:**'
     edit = await Drone.send_message(event.chat_id, "Trying to process.", reply_to=msg.id)
-    new_name = "Asuran_" + dt.now().isoformat("_", "seconds")
+    new_name = "out_" + dt.now().isoformat("_", "seconds")
     if hasattr(msg.media, "document"):
         file = msg.media.document
     else:
@@ -63,9 +63,8 @@ async def compress(event, msg, ffmpeg_cmd=0, ps_name=None):
     name =  '__' + dt.now().isoformat("_", "seconds") + ".mp4"
     os.rename(n, name)
     await edit.edit("Extracting metadata...")
-    vid = video_metadata(name)
-    hgt = int(vid['height'])
-    wdt = int(vid['width'])
+    hgt = video_metadata(name)["height"]
+    wdt = video_metadata(name)["width"]
     if ffmpeg_cmd == 2:
         if hgt == 360 or wdt == 640:
             await edit.edit("Fast compress cannot be used for this media, try using HEVC!")
@@ -73,7 +72,7 @@ async def compress(event, msg, ffmpeg_cmd=0, ps_name=None):
             return
     FT = time.time()
     progress = f"progress-{FT}.txt"
-    cmd = "Join @MaheshChauhan"
+    cmd = ""
     if ffmpeg_cmd == 1:
         cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -preset ultrafast -vcodec libx265 -crf 28 -acodec copy -c:s copy """{out}""" -y'
     elif ffmpeg_cmd == 2:
