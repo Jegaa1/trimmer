@@ -72,7 +72,7 @@ async def compress(event, msg, ffmpeg_cmd=0, ps_name=None):
             return
     FT = time.time()
     progress = f"progress-{FT}.txt"
-    cmd = ""
+    cmd = "Join @MaheshChauhan"
     if ffmpeg_cmd == 1:
         cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -preset ultrafast -vcodec libx265 -crf 28 -acodec copy -c:s copy """{out}""" -y'
     elif ffmpeg_cmd == 2:
@@ -105,9 +105,9 @@ async def compress(event, msg, ffmpeg_cmd=0, ps_name=None):
     os.rename(out, out2)
     i_size = os.path.getsize(name)
     f_size = os.path.getsize(out2)
-    text = f''
+    text = f'COMPRESSED by** : @{BOT_UN}\n\nbefore compressing : `{i_size}`\nafter compressing : `{f_size}`'
     if ps_name != "**ENCODING:**":
-        text = f''
+        text = f'**COMPRESSED by** : @{BOT_UN}\n\nbefore compressing : `{i_size}`\nafter compressing : `{f_size}`'
     UT = time.time()
     if 'webm' in mime:
         try:
