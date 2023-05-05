@@ -322,7 +322,7 @@ async def vtrim(event):
             print(e)
             return await xx.edit("An error occured while waiting for the response.")
         try:
-            xy = await conv.send_message("send me the end time of the video you want to trim till as a reply to this.  \n\nIn format hh:mm:ss , for eg: `00:20:32` ", buttons=markup)
+            xy = await conv.send_message("send me the end time of the video you want to trim till as a reply to this.  \n\nIn format hh:mm:ss , for eg: `00:19:32` or `00:20:32` or `00:21:32` or `00:30:32` or `00:31:32`or `00:32:32` or `00:33:32`", buttons=markup)
             y = await conv.get_reply()
             et = y.text
             await xy.delete()                    
