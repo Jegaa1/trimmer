@@ -24,7 +24,7 @@ from ethon.pyfunc import video_metadata
 from .. import Drone, BOT_UN
 
 from LOCAL.localisation import SUPPORT_LINK, JPG, JPG2, JPG3
-from LOCAL.utils import ffmpeg_progress
+from LOCAL.utils import ffmpeg_exec_progress
 
 async def encode(event, msg, scale=0):
     Drone = event.client
@@ -85,17 +85,45 @@ async def encode(event, msg, scale=0):
             return await edit.edit(f"The video is already in {scale}p resolution.")
     FT = time.time()
     progress = f"progress-{FT}.txt"
-    cmd = ''
+    cmd = ["Join @MaheshChauhan"]
     if scale == 240:
-        cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -c:v libx264 -pix_fmt yuv420p -preset faster -s 426x240 -crf 24 -c:a libopus -ac 2 -ab 128k -c:s copy """{out}""" -y'
+        cmd = [
+            "ffmpeg", "-hide_banner", "-loglevel", "quiet", "-progress", progress, 
+            "-i", name, 
+            "-c:v", "libx264", "-pix_fmt", "yuv420p", "-preset", "faster", "-vf", "scale=426:trunc(ow/a/2)*2", "-crf", "22",
+            "-c:a", "libopus", "-ac", "2", "-ab", "128k", 
+            "-c:s", "copy", 
+            out, "-y"
+        ]
     elif scale == 360:
-        cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -c:v libx264 -pix_fmt yuv420p -preset faster -s 640x360 -crf 24 -c:a libopus -ac 2 -ab 128k -c:s copy """{out}""" -y'
+        cmd = [
+            "ffmpeg", "-hide_banner", "-loglevel", "quiet", "-progress", progress, 
+            "-i", name, 
+            "-c:v", "libx264", "-pix_fmt", "yuv420p", "-preset", "faster", "-vf", "scale=640:trunc(ow/a/2)*2", "-crf", "22",
+            "-c:a", "libopus", "-ac", "2", "-ab", "128k", 
+            "-c:s", "copy", 
+            out, "-y"
+        ]
     elif scale == 480:
-        cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -c:v libx264 -pix_fmt yuv420p -preset faster -s 854x480 -crf 24 -c:a libopus -ac 2 -ab 128k -c:s copy """{out}""" -y'
+        cmd = [
+            "ffmpeg", "-hide_banner", "-loglevel", "quiet", "-progress", progress, 
+            "-i", name, 
+            "-c:v", "libx264", "-pix_fmt", "yuv420p", "-preset", "faster", "-vf", "scale=854:trunc(ow/a/2)*2", "-crf", "22",
+            "-c:a", "libopus", "-ac", "2", "-ab", "256k", 
+            "-c:s", "copy", 
+            out, "-y"
+        ]
     elif scale == 720:
-        cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -c:v libx264 -pix_fmt yuv420p -preset faster -s 1280x720 -crf 24 -c:a libopus -ac 2 -ab 128k -c:s copy """{out}""" -y'
+        cmd = [
+            "ffmpeg", "-hide_banner", "-loglevel", "quiet", "-progress", progress, 
+            "-i", name, 
+            "-c:v", "libx264", "-pix_fmt", "yuv420p", "-preset", "faster", "-vf", "scale=1280:trunc(ow/a/2)*2", "-crf", "22",
+            "-c:a", "libopus", "-ac", "2", "-ab", "256k", 
+            "-c:s", "copy", 
+            out, "-y"
+        ]
     try:
-        await ffmpeg_progress(cmd, name, progress, FT, edit, '**ENCODING:**')
+        await ffmpeg_exec_progress(cmd, name, progress, FT, edit, '**ENCODING:**')
     except Exception as e:
         os.rmdir("encodemedia")
         print(e)
