@@ -73,15 +73,22 @@ async def compress(event, msg, ffmpeg_cmd=0, ps_name=None):
             return
     FT = time.time()
     progress = f"progress-{FT}.txt"
-    cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" None """{out}""" -y'
+    cmd = "Join @MaheshChauhan"
     if ffmpeg_cmd == 1:
         cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -preset ultrafast -vcodec libx265 -crf 28 -acodec copy -c:s copy """{out}""" -y'
     elif ffmpeg_cmd == 2:
-        cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -c:v libx265 -crf 22 -preset ultrafast -s 640x360 -c:a copy -c:s copy """{out}""" -y'
+        cmd = [
+            "ffmpeg", "-hide_banner", "-loglevel", "quiet", "-progress", progress, 
+            "-i", name, 
+            "-c:v", "libx265", "-crf 22", "-preset", "ultrafast", "-vf", "scale=640:trunc(ow/a/2)*2", 
+            "-c:a", "copy", 
+            "-c:s", "copy", 
+            out, "-y"
+        ]
     elif ffmpeg_cmd == 3:
-        cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -preset faster -vcodec libx265 -crf 23 -acodec copy -c:s copy """{out}""" -y'
+        cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -preset ultrafast -vcodec libx265 -acodec copy -c:s copy """{out}""" -y'
     elif ffmpeg_cmd == 4:
-        cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -preset faster -vcodec libx264 -crf 23 -acodec copy -c:s copy """{out}""" -y'
+        cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -preset ultrafast -vcodec libx264 -acodec copy -c:s copy """{out}""" -y'
     try:
         if ffmpeg_cmd != 2:
             await ffmpeg_progress(cmd, name, progress, FT, edit, ps_name)
