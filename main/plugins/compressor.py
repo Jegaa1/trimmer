@@ -24,14 +24,14 @@ from ethon.pyfunc import video_metadata
 from .. import Drone, BOT_UN
 
 from LOCAL.localisation import SUPPORT_LINK, JPG, JPG2, JPG3
-from LOCAL.utils import ffmpeg_progress
+from LOCAL.utils import ffmpeg_progress, ffmpeg_exec_progress
 
 async def compress(event, msg, ffmpeg_cmd=0, ps_name=None):
     Drone = event.client
     if ps_name is None:
         ps_name = '**COMPRESSING:**'
     edit = await Drone.send_message(event.chat_id, "Trying to process.", reply_to=msg.id)
-    new_name = "out_" + dt.now().isoformat("_", "seconds")
+    new_name = "Asuran_" + dt.now().isoformat("_", "seconds")
     if hasattr(msg.media, "document"):
         file = msg.media.document
     else:
@@ -83,7 +83,10 @@ async def compress(event, msg, ffmpeg_cmd=0, ps_name=None):
     elif ffmpeg_cmd == 4:
         cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -preset faster -vcodec libx264 -crf 23 -acodec copy -c:s copy """{out}""" -y'
     try:
-        await ffmpeg_progress(cmd, name, progress, FT, edit, ps_name)
+        if ffmpeg_cmd != 2:
+            await ffmpeg_progress(cmd, name, progress, FT, edit, ps_name)
+        else:
+            await ffmpeg_exec_progress(cmd, name, progress, FT, edit, ps_name)
     except Exception as e:
         os.rmdir("encodemedia")
         print(e)
@@ -96,9 +99,9 @@ async def compress(event, msg, ffmpeg_cmd=0, ps_name=None):
     os.rename(out, out2)
     i_size = os.path.getsize(name)
     f_size = os.path.getsize(out2)
-    text = f'COMPRESSED by** : @{BOT_UN}\n\nbefore compressing : `{i_size}`\nafter compressing : `{f_size}`'
+    text = f''
     if ps_name != "**ENCODING:**":
-        text = f'**COMPRESSED by** : @{BOT_UN}\n\nbefore compressing : `{i_size}`\nafter compressing : `{f_size}`'
+        text = f''
     UT = time.time()
     if 'webm' in mime:
         try:
