@@ -22,14 +22,6 @@ from ethon.pyfunc import video_metadata
 def hhmmss(seconds):
     x = time.strftime('%H:%M:%S',time.gmtime(seconds))
     return x
-    
-metadata = video_metadata(name)
-if metadata is None:
-    # handle the error, e.g. log it or return an error message
-    print("Error: unable to retrieve video metadata")
-else:
-    duration = metadata["duration"]
-    # rest of your code
 
 async def ssgen(video, time_stamp):
     out = dt.now().isoformat("_", "seconds") + ".jpg"
