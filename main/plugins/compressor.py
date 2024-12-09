@@ -27,6 +27,13 @@ from LOCAL.localisation import SUPPORT_LINK, JPG, JPG2, JPG3
 from LOCAL.utils import ffmpeg_progress, ffmpeg_exec_progress
 
 async def compress(event, msg, ffmpeg_cmd=0, ps_name=None):
+    metadata = video_metadata(out2)
+    if metadata is None:
+    await edit.edit("Error: unable to retrieve video metadata.")
+    return
+    duration = metadata["duration"]
+    width = metadata["width"]
+    height = metadata["height"]
     Drone = event.client
     if ps_name is None:
         ps_name = '**COMPRESSING:**'
