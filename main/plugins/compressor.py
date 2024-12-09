@@ -24,16 +24,9 @@ from ethon.pyfunc import video_metadata
 from .. import Drone, BOT_UN
 
 from LOCAL.localisation import SUPPORT_LINK, JPG, JPG2, JPG3
-from LOCAL.utils import ffmpeg_progress, ffmpeg_exec_progress
+from LOCAL.utils import ffmpeg_progress
 
 async def compress(event, msg, ffmpeg_cmd=0, ps_name=None):
-    metadata = video_metadata(out2)
-    if metadata is None:
-    await edit.edit("Error: unable to retrieve video metadata.")
-    return
-    duration = metadata["duration"]
-    width = metadata["width"]
-    height = metadata["height"]
     Drone = event.client
     if ps_name is None:
         ps_name = '**COMPRESSING:**'
@@ -70,8 +63,9 @@ async def compress(event, msg, ffmpeg_cmd=0, ps_name=None):
     name =  '__' + dt.now().isoformat("_", "seconds") + ".mp4"
     os.rename(n, name)
     await edit.edit("Extracting metadata...")
-    hgt = video_metadata(name)["height"]
-    wdt = video_metadata(name)["width"]
+    vid = video_metadata(name)
+    hgt = int(vid['height'])
+    wdt = int(vid['width'])
     if ffmpeg_cmd == 2:
         if hgt == 360 or wdt == 640:
             await edit.edit("Fast compress cannot be used for this media, try using HEVC!")
@@ -79,27 +73,17 @@ async def compress(event, msg, ffmpeg_cmd=0, ps_name=None):
             return
     FT = time.time()
     progress = f"progress-{FT}.txt"
-    cmd = "Join @MaheshChauhan"
+    cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" None """{out}""" -y'
     if ffmpeg_cmd == 1:
         cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -preset ultrafast -vcodec libx265 -crf 28 -acodec copy -c:s copy """{out}""" -y'
     elif ffmpeg_cmd == 2:
-        cmd = [
-            "ffmpeg", "-hide_banner", "-loglevel", "quiet", "-progress", progress, 
-            "-i", name, 
-            "-c:v", "libx265", "-crf 22", "-preset", "ultrafast", "-vf", "scale=640:trunc(ow/a/2)*2", 
-            "-c:a", "copy", 
-            "-c:s", "copy", 
-            out, "-y"
-        ]
+        cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -c:v libx265 -crf 22 -preset ultrafast -s 640x360 -c:a copy -c:s copy """{out}""" -y'
     elif ffmpeg_cmd == 3:
-        cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -preset ultrafast -vcodec libx265 -acodec copy -c:s copy """{out}""" -y'
+        cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -preset faster -vcodec libx265 -crf 23 -acodec copy -c:s copy """{out}""" -y'
     elif ffmpeg_cmd == 4:
-        cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -preset ultrafast -vcodec libx264 -acodec copy -c:s copy """{out}""" -y'
+        cmd = f'ffmpeg -hide_banner -loglevel quiet -progress {progress} -i """{name}""" -preset faster -vcodec libx264 -crf 23 -acodec copy -c:s copy """{out}""" -y'
     try:
-        if ffmpeg_cmd != 2:
-            await ffmpeg_progress(cmd, name, progress, FT, edit, ps_name)
-        else:
-            await ffmpeg_exec_progress(cmd, name, progress, FT, edit, ps_name)
+        await ffmpeg_progress(cmd, name, progress, FT, edit, ps_name)
     except Exception as e:
         os.rmdir("encodemedia")
         print(e)
